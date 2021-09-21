@@ -14,26 +14,60 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(blockTapped))
-        block.addGestureRecognizer(tap)
-        block.isUserInteractionEnabled = true
+        
         
     }
-
-    @objc func blockTapped() {
-        UIView.animate(withDuration: 1.2) {
-            let sizeMultiplier: CGFloat = 1.5
-            let currentBlockFrame = self.block.frame
-            
-            let newWidth = self.block.frame.width * sizeMultiplier
-            let newHeght = self.block.frame.height * sizeMultiplier
-            
-            let newX = self.block.frame.origin.x - (newWidth - self.block.frame.size.width) / 2
-            let newY = self.block.frame.origin.y - (newHeght - self.block.frame.size.height) / 2
-            
-            self.block.frame = CGRect(x: newX, y: newY, width: newWidth, height: newHeght)
-            
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            self.upMove()
+        }
+        
+    }
+    
+    func upMove() {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+            self.block.frame.origin = CGPoint(x: self.view.center.x - (self.block.frame.width / 2), y: 0)
+        } completion: { (success) in
+            self.rightMove()
         }
     }
+    
+    func rightMove() {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+            self.block.frame.origin = CGPoint(x: self.view.frame.size.width - self.block.frame.width, y: self.view.center.y - (self.block.frame.size.height / 2))
+        } completion: { (success) in
+            self.downMove()
+        }
+    }
+    
+    func downMove() {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+            self.block.frame.origin = CGPoint(x: self.view.center.x - (self.block.frame.width / 2), y: self.view.frame.height - self.block.frame.size.height)
+        } completion: { (success) in
+            self.leftMove()
+        }
+    }
+    
+    func leftMove() {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+            self.block.frame.origin = CGPoint(x: 0, y: self.view.center.y - (self.block.frame.size.height / 2))
+        } completion: { (success) in
+            self.resetMove()
+        }
+    }
+    
+    func resetMove() {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+            self.block.center = self.view.center
+        } completion: { (success) in
+            print("done")
+        }
+       
+    }
+
+
 }
 
