@@ -21,14 +21,13 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            self.upMove()
-        }
+        self.upMove()
         
     }
     
     func upMove() {
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+       
+        UIView.animate(withDuration: 2, delay: 2, options: .curveEaseIn) {
             self.block.frame.origin = CGPoint(x: self.view.center.x - (self.block.frame.width / 2), y: 0)
         } completion: { (success) in
             self.rightMove()
@@ -36,7 +35,7 @@ class ViewController: UIViewController {
     }
     
     func rightMove() {
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+        UIView.animate(withDuration: 2, delay: 0, options: .curveEaseOut) {
             self.block.frame.origin = CGPoint(x: self.view.frame.size.width - self.block.frame.width, y: self.view.center.y - (self.block.frame.size.height / 2))
         } completion: { (success) in
             self.downMove()
@@ -44,7 +43,7 @@ class ViewController: UIViewController {
     }
     
     func downMove() {
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+        UIView.animate(withDuration: 2, delay: 0, options: .curveLinear) {
             self.block.frame.origin = CGPoint(x: self.view.center.x - (self.block.frame.width / 2), y: self.view.frame.height - self.block.frame.size.height)
         } completion: { (success) in
             self.leftMove()
@@ -52,7 +51,7 @@ class ViewController: UIViewController {
     }
     
     func leftMove() {
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+        UIView.animate(withDuration: 2, delay: 0, options: .curveEaseInOut) {
             self.block.frame.origin = CGPoint(x: 0, y: self.view.center.y - (self.block.frame.size.height / 2))
         } completion: { (success) in
             self.resetMove()
@@ -60,7 +59,7 @@ class ViewController: UIViewController {
     }
     
     func resetMove() {
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveLinear) {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseOut) {
             self.block.center = self.view.center
         } completion: { (success) in
             print("done")
