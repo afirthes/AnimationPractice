@@ -8,81 +8,86 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var block: UIView!
-    @IBOutlet weak var startButton: UIButton!
-    @IBOutlet weak var pauseButton: UIButton!
-    @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var slider: UISlider!
     
     var animator: UIViewPropertyAnimator!
     
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var loginView: UIView!
+    @IBOutlet weak var loginButton: UIButton!
+    
+    lazy var logoImage: UIImageView! = {
+        let image = UIImage(named: "cat")!
+        let imageView = UIImageView(image: image)
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
+    var moveLogoAnimator: UIViewPropertyAnimator!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        logoImage.translatesAutoresizingMaskIntoConstraints = false
+        loginView.addSubview(logoImage)
         
-        setupAnimation()
+        NSLayoutConstraint.activate([
+            logoImage.centerXAnchor.constraint(equalTo: loginView.centerXAnchor),
+            logoImage.centerYAnchor.constraint(equalTo: loginView.centerYAnchor),
+            logoImage.heightAnchor.constraint(equalToConstant: CGFloat(100)),
+            logoImage.widthAnchor.constraint(equalToConstant: CGFloat(100))
+        ])
+        
+        loginView.transform = CGAffineTransform(scaleX: 0, y: 0) // invisible
+        usernameTextField.alpha = CGFloat(0)
+        passwordTextField.alpha = CGFloat(0)
+        loginButton.alpha = CGFloat(0)
+        
+        loginView.backgroundColor = UIColor.init(red: 0.29, green: 0.29, blue: 0.29, alpha: 1.0)
+        
     }
     
-    func setupAnimation() {
-        
-        self.block.transform = CGAffineTransform.identity
-        self.block.frame.origin.x = CGFloat(0)
-        self.block.backgroundColor = UIColor.black
-        
-        animator = UIViewPropertyAnimator(duration: 1.2, curve: UIView.AnimationCurve.linear, animations: {
-            let screenWidth = self.view.frame.width
-            let blockWidth = self.block.frame.width
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        loginView.layer.cornerRadius = CGFloat(7.0)
+        loginButton.layer.cornerRadius = CGFloat(5.0)
+        logoImage.layer.cornerRadius = CGFloat(50)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        UIView.animate(withDuration: 0.8, delay: 1, usingSpringWithDamping: 0.5, initialSpringVelocity: 2, options: .curveEaseOut) {
             
-            self.block.frame.origin.x = screenWidth - blockWidth
-            self.block.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-        })
-        
-        animator.addCompletion { (position) in
-            
-            self.block.backgroundColor = UIColor.red
-            
+            self.loginView.transform = CGAffineTransform(scaleX: 1, y: 1)
+        } completion: { (success) in
+            self.setupMoveLogoAnimation()
+            self.moveLogoAnimator.startAnimation()
         }
+
+    }
+    
+    
+    func setupMoveLogoAnimation() {
+        
+        moveLogoAnimator = UIViewPropertyAnimator(duration: 2.0, curve: .easeIn, animations: nil)
+        
+        moveLogoAnimator.addAnimations({
+            self.logoImage.frame.origin.y = CGFloat(20.0)
+            self.loginView.backgroundColor = UIColor.white
+        }, delayFactor: 0.2)
+        
+        moveLogoAnimator.addAnimations({
+            self.usernameTextField.alpha = 1.0
+        }, delayFactor: 0.6)
+        
+        moveLogoAnimator.addAnimations({
+            self.passwordTextField.alpha = 1.0
+        }, delayFactor: 0.7)
+        
+        moveLogoAnimator.addAnimations({
+            self.loginButton.alpha = 1.0
+        }, delayFactor: 0.8)
         
     }
     
-    @IBAction func startAction(_ sender: Any) {
-        
-        if animator.isRunning {
-            // still in flight
-            return
-        }
-        
-        switch animator.state{
-            case .active:
-                animator.isReversed = true
-                
-                animator.addAnimations {
-                    self.block.transform = CGAffineTransform.init(scaleX: 1.7, y: 1.7)
-                }
-                animator.startAnimation()
-            case .inactive:
-                setupAnimation()
-                animator.startAnimation()
-                break
-            case .stopped:
-                animator.finishAnimation(at: .end)
-            @unknown default:
-                break
-        }
-    }
-    
-    @IBAction func pauseAction(_ sender: Any) {
-        if animator.state == UIViewAnimatingState.active {
-            animator.pauseAnimation()
-        }
-    }
-    
-    @IBAction func stopAction(_ sender: Any) {
-        animator.stopAnimation(false)
-    }
-    
-    @IBAction func sliderDidChange(_ sender: Any) {
-        animator.fractionComplete = CGFloat(slider.value)
-    }
 }
 
