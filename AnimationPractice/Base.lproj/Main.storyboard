@@ -17,28 +17,70 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G0S-Ui-fBI">
-                                <rect key="frame" x="177" y="418" width="60" height="60"/>
+                                <rect key="frame" x="0.0" y="418" width="60" height="60"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="K47-Bg-txg"/>
                                     <constraint firstAttribute="height" constant="60" id="omI-5N-p07"/>
                                 </constraints>
                             </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="yv7-Y6-H0e">
+                                <rect key="frame" x="0.0" y="866" width="414" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7jt-gs-6wc">
+                                        <rect key="frame" x="0.0" y="0.0" width="138" height="30"/>
+                                        <state key="normal" title="Start"/>
+                                        <connections>
+                                            <action selector="startAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iaq-wg-FCv"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28a-Yu-148">
+                                        <rect key="frame" x="138" y="0.0" width="138" height="30"/>
+                                        <state key="normal" title="Pause"/>
+                                        <connections>
+                                            <action selector="pauseAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="H6o-FQ-P2q"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="boC-sU-YmO">
+                                        <rect key="frame" x="276" y="0.0" width="138" height="30"/>
+                                        <state key="normal" title="Stop"/>
+                                        <connections>
+                                            <action selector="stopAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AHj-qx-4jj"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="a2h-hQ-7ef">
+                                <rect key="frame" x="-2" y="827" width="418" height="31"/>
+                                <connections>
+                                    <action selector="sliderDidChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="FTm-qt-l9W"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="G0S-Ui-fBI" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3uP-Ve-HNc"/>
-                            <constraint firstItem="G0S-Ui-fBI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="wVf-y4-eOM"/>
+                            <constraint firstItem="a2h-hQ-7ef" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="4nt-wi-Yq2"/>
+                            <constraint firstAttribute="bottom" secondItem="yv7-Y6-H0e" secondAttribute="bottom" id="8Ln-EC-h28"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yv7-Y6-H0e" secondAttribute="trailing" id="BUu-ma-WvQ"/>
+                            <constraint firstItem="yv7-Y6-H0e" firstAttribute="top" secondItem="a2h-hQ-7ef" secondAttribute="bottom" constant="9" id="bif-bG-hCX"/>
+                            <constraint firstItem="yv7-Y6-H0e" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="emH-4e-whx"/>
+                            <constraint firstItem="G0S-Ui-fBI" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fLG-oD-9Vb"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="a2h-hQ-7ef" secondAttribute="trailing" id="roj-SU-f0q"/>
+                            <constraint firstItem="G0S-Ui-fBI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vi9-KS-kpU"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="block" destination="G0S-Ui-fBI" id="Veo-Xl-57a"/>
+                        <outlet property="pauseButton" destination="28a-Yu-148" id="OrS-YB-r6H"/>
+                        <outlet property="slider" destination="a2h-hQ-7ef" id="0sI-si-Lqa"/>
+                        <outlet property="startButton" destination="7jt-gs-6wc" id="r20-Fc-mB5"/>
+                        <outlet property="stopButton" destination="boC-sU-YmO" id="ndh-8X-pUk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="20" y="108"/>
+            <point key="canvasLocation" x="18.840579710144929" y="107.8125"/>
         </scene>
     </scenes>
     <resources>

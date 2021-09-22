@@ -10,63 +10,79 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var block: UIView!
+    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var slider: UISlider!
+    
+    var animator: UIViewPropertyAnimator!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupAnimation()
+    }
+    
+    func setupAnimation() {
         
+        self.block.transform = CGAffineTransform.identity
+        self.block.frame.origin.x = CGFloat(0)
+        self.block.backgroundColor = UIColor.black
+        
+        animator = UIViewPropertyAnimator(duration: 1.2, curve: UIView.AnimationCurve.linear, animations: {
+            let screenWidth = self.view.frame.width
+            let blockWidth = self.block.frame.width
+            
+            self.block.frame.origin.x = screenWidth - blockWidth
+            self.block.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        })
+        
+        animator.addCompletion { (position) in
+            
+            self.block.backgroundColor = UIColor.red
+            
+        }
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @IBAction func startAction(_ sender: Any) {
         
-        self.upMove()
+        if animator.isRunning {
+            // still in flight
+            return
+        }
         
-    }
-    
-    func upMove() {
-       
-        UIView.animate(withDuration: 2, delay: 2, options: .curveEaseIn) {
-            self.block.frame.origin = CGPoint(x: self.view.center.x - (self.block.frame.width / 2), y: 0)
-        } completion: { (success) in
-            self.rightMove()
+        switch animator.state{
+            case .active:
+                animator.isReversed = true
+                
+                animator.addAnimations {
+                    self.block.transform = CGAffineTransform.init(scaleX: 1.7, y: 1.7)
+                }
+                animator.startAnimation()
+            case .inactive:
+                setupAnimation()
+                animator.startAnimation()
+                break
+            case .stopped:
+                animator.finishAnimation(at: .end)
+            @unknown default:
+                break
         }
     }
     
-    func rightMove() {
-        UIView.animate(withDuration: 2, delay: 0, options: .curveEaseOut) {
-            self.block.frame.origin = CGPoint(x: self.view.frame.size.width - self.block.frame.width, y: self.view.center.y - (self.block.frame.size.height / 2))
-        } completion: { (success) in
-            self.downMove()
+    @IBAction func pauseAction(_ sender: Any) {
+        if animator.state == UIViewAnimatingState.active {
+            animator.pauseAnimation()
         }
     }
     
-    func downMove() {
-        UIView.animate(withDuration: 2, delay: 0, options: .curveLinear) {
-            self.block.frame.origin = CGPoint(x: self.view.center.x - (self.block.frame.width / 2), y: self.view.frame.height - self.block.frame.size.height)
-        } completion: { (success) in
-            self.leftMove()
-        }
+    @IBAction func stopAction(_ sender: Any) {
+        animator.stopAnimation(false)
     }
     
-    func leftMove() {
-        UIView.animate(withDuration: 2, delay: 0, options: .curveEaseInOut) {
-            self.block.frame.origin = CGPoint(x: 0, y: self.view.center.y - (self.block.frame.size.height / 2))
-        } completion: { (success) in
-            self.resetMove()
-        }
+    @IBAction func sliderDidChange(_ sender: Any) {
+        animator.fractionComplete = CGFloat(slider.value)
     }
-    
-    func resetMove() {
-        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseOut) {
-            self.block.center = self.view.center
-        } completion: { (success) in
-            print("done")
-        }
-       
-    }
-
-
 }
 
