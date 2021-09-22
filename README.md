@@ -1,4 +1,4 @@
 # AnimationPractice
 Animation basics
 
-https://github.com/afirthes/AnimationPractice/main/giphy_login.gif
+![alt text](https://raw.githubusercontent.com/afirthes/AnimationPractice/main/giphy_login.gif)
